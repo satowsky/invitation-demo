@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Imperial+Script&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Luxurious+Script&family=Rochester&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --sans: 'sans-serif';
+  --font-luxurious: 'Luxurious Script', 'serif';
+  --font-imperial: 'Imperial Script', 'cursive';
+  --font-googleSans: 'Google Sans', 'serif';
+  --font-LibreBaskerville: 'Libre Baskerville', 'serif';
+
+  --animate-sway: sway 4s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pinSlow: spin 12s linear infinite;
+
+  @keyframes sway {
+    0%, 100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer utilities {
+  /* Ocultar en Chrome, Safari y Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Ocultar en IE, Edge y Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
