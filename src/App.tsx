@@ -21,15 +21,8 @@ const App = () => {
   const handleAmount = (e: any) => {
     const value = Math.max(1, parseInt(e.target.value) || 1);
 
-    if (value === '') {
-      setAmount('');
-      return;
-    }
-
-    const newValue = parseInt(value, 10);
-
-    if (newValue >= 1 && newValue <= MAX_GUEST) {
-      setAmount(newValue);
+    if (value >= 1 && value <= MAX_GUEST) {
+      setAmount(value);
 
       setNames((names) => {
         return Array.from({ length: value }, (_, index) => {
@@ -38,13 +31,6 @@ const App = () => {
       });
     }
   };
-
-  const handleBlur = () => {
-    if (amount === '') {
-      setAmount(1);
-      setNames(['']);
-    }
-  }
 
   const handleChangeName = (index: number, value: any) => {
     setNames((names) => {
@@ -221,24 +207,24 @@ const App = () => {
               </div>
             </div>
           </div>
-          <div className="absolute -z-50  top-[-60px] left-0 right-0 rotate-180 animate-float">
+          <div className="absolute -z-50  -top-15 left-0 right-0 rotate-180 animate-float">
             <div className="flex items-center justify-center">
-              <div className=" w-[190px] rotate-[10deg]">
+              <div className=" w-47.5 rotate-10">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
-              <div className=" w-[120px] rotate-[10deg]">
+              <div className=" w-30 otate-10">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
-              <div className=" w-[160px] rotate-[10deg]">
+              <div className=" w-40 otate-10">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
-              <div className=" w-[160px] rotate-[260deg]">
+              <div className=" w-40 rotate-260">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
-              <div className=" w-[120px] rotate-[260deg]">
+              <div className=" w-40 rotate-260">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
-              <div className=" w-[190px] rotate-[260deg]">
+              <div className=" w-47.5 rotate-260">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
             </div>
@@ -247,20 +233,20 @@ const App = () => {
       </div>
 
       <div className="bg-red-50 flex flex-col items-center justify-start pt-50 w-dvw   sm:w-150  min-h-dvh rounded-lg p-4">
-        <h2 className="-m-30 font-luxurious text-[70px] sm:text-[90px]  bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 inline-block text-transparent bg-clip-text decoration-red-800 border-b-yellow-900 [-webkit-text-stroke:1px_yellow-900] px-2">
+        <h2 className="-m-30 font-luxurious text-[70px] sm:text-[90px]  bg-linear-to-r from-yellow-600 via-yellow-500 to-yellow-600 inline-block text-transparent bg-clip-text decoration-red-800 border-b-yellow-900 [-webkit-text-stroke:1px_yellow-900] px-2">
           Celebrando
         </h2>
         <div className="flex items-center flex-row mt-20 max-h-30">
           <div className="w-15">
             <img src={Hojas2} className="animate-float" />
           </div>
-          <h2 className="text-[120px] sm:text-[150px]  font-imperial bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-600 inline-block text-transparent bg-clip-text decoration-red-800 border-b-yellow-900 [-webkit-text-stroke:1px_yellow-900] px-4" >80</h2>
+          <h2 className="text-[120px] sm:text-[150px]  font-imperial bg-linear-to-r from-yellow-500 via-yellow-400 to-yellow-600 inline-block text-transparent bg-clip-text decoration-red-800 border-b-yellow-900 [-webkit-text-stroke:1px_yellow-900] px-4" >80</h2>
           <p className="text-5xl sm:text-7xl font-imperial text-red-800">años</p>
           <div className="w-15 scale-x-[-1]">
             <img src={Hojas2} className="animate-float" />
           </div>
         </div>
-        <p className="my-2 text-center font-LibreBaskerville sm:text-lg text-sm  bg-gradient-to-r from-red-900 via-red-600 to-red-900 inline-block text-transparent bg-clip-text">
+        <p className="my-2 text-center font-LibreBaskerville sm:text-lg text-sm  bg-linear-to-r from-red-900 via-red-600 to-red-900 inline-block text-transparent bg-clip-text">
           Ocho décadas no se cumplen todos los días; son ochenta años de amor incondicional, enseñanzas, risas y de ser el pilar fundamental de nuestra familia. <br /><br />  Como sus hijos, no hay alegría más grande para nosotros que verla llegar a este momento rodeada de salud y de las personas que más aprecia.
         </p>
 
@@ -268,8 +254,8 @@ const App = () => {
         <div className="flex flex-col items-center justify-center">
           <img src={Marco2} alt="" />
           <div className="flex flex-col items-center">
-            <h4 className="text-4xl text-center font-imperial font-bold  bg-gradient-to-r from-red-900 via-red-600 to-red-900 inline-block text-transparent bg-clip-text">Por eso, queremos invitarlos a celebrar</h4>
-            <h3 className="text-xl text-center font-LibreBaskerville bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text ">junto a nosotros este hermoso día en su vida.</h3>
+            <h4 className="text-4xl text-center font-imperial font-bold  bg-linear-to-r from-red-900 via-red-600 to-red-900 inline-block text-transparent bg-clip-text">Por eso, queremos invitarlos a celebrar</h4>
+            <h3 className="text-xl text-center font-LibreBaskerville bg-linear-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text ">junto a nosotros este hermoso día en su vida.</h3>
           </div>
           <img src={Marco2} alt="" className="rotate-180" />
         </div>
@@ -278,46 +264,44 @@ const App = () => {
         <div className="flex flex-col">
           <img src={Marco1} />
           <div className="flex flex-row items-center justify-center">
-            <FaCalendarCheck size={36} color={colors.redBase} />
+            <FaCalendarCheck size={24} color={colors.redBase} />
             <div className="flex flex-row items-center">
-              <h2 className="font-LibreBaskerville text-3xl p-4 bg-gradient-to-r from-red-900 via-red-800 to-red-900 inline-block text-transparent bg-clip-text">12</h2>
-              <h2 className="font-LibreBaskerville text-2xl bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text ">de Septiembre</h2>
+              <h2 className="font-LibreBaskerville text-2xl p-4 bg-linear-to-r from-red-900 via-red-800 to-red-900 inline-block text-transparent bg-clip-text">12</h2>
+              <h2 className="font-LibreBaskerville text-xl bg-linear-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text ">de Septiembre</h2>
             </div>
           </div>
         </div>
 
         <div className="flex flex-row">
-          <LuTimer size={36} color={colors.redBase} />
+          <LuTimer size={24} color={colors.redBase} />
           <div className="flex flex-row items-center justify-center">
-            <p className="font-LibreBaskerville text-2xl pr-2 bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text">A partir de las</p>
-            <h2 className="font-LibreBaskerville text-2xl bg-gradient-to-r from-red-900 via-red-800 to-red-900 inline-block text-transparent bg-clip-text">2:00 PM</h2>
+            <p className="font-LibreBaskerville text-xl pr-2 bg-linear-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text">A partir de las</p>
+            <h2 className="font-LibreBaskerville text-xl bg-linear-to-r from-red-900 via-red-800 to-red-900 inline-block text-transparent bg-clip-text">2:00 PM</h2>
           </div>
         </div>
         <img src={Marco1} className="rotate-180" />
         <div className="my-2">
           <div className="flex flex-row items-center justify-center py-2">
             <MdOutlinePlace size={36} color={colors.redBase} />
-            <h4 className="flex flex-wrap font-LibreBaskerville text-lg bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text">Salón La Galera Colón Número 613, Centro.</h4>
+            <h4 className="flex flex-wrap font-LibreBaskerville text-lg bg-linear-to-r from-yellow-500 via-yellow-600 to-yellow-500 text-transparent bg-clip-text">Salón La Galera Colón Número 613, Centro.</h4>
           </div>
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6414.831827225741!2d-96.72515050532492!3d17.058861966751486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85c7224652c53fe5%3A0xc1fbd8aeeff449cb!2sLA%20GALERA!5e0!3m2!1ses-419!2smx!4v1786261138739!5m2!1ses-419!2smx" className="rounded-xl w-dvw sm:w-150 h-75" loading="lazy"></iframe>
         </div>
       </div>
 
       <div className="flex flex-col items-center justify-start pt-10 w-dvw sm:w-150 min-h-dvh bg-red-50 rounded-lg shadow-lg px-4">
-        <h3 className="font-LibreBaskerville text-4xl bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text py-2">Asistencia</h3>
+        <h3 className="font-LibreBaskerville text-4xl bg-linear-to-r from-yellow-500 via-yellow-600 to-yellow-500 inline-block text-transparent bg-clip-text py-2">Asistencia</h3>
 
-        <p className="my-2 text-center font-LibreBaskerville text-sm">Tu presencia es muy importante para nosotros. Favor de confirmar tu asistencia antes del 01 de septiembre de 2026.</p>
+        <p className="my-2 text-center font-LibreBaskerville text-lg">Tu presencia es muy importante para nosotros. Favor de confirmar tu asistencia <b>antes del 01 de Septiembre de 2026.</b></p>
 
-        <p className="my-2 text-center text-sm">
-          Indica el número de pases, seguido de los nombres completos de los invitados.
-
-          <br />Nota: podrás registrar un máximo de cuatro invitados*
+        <p className="my-2 text-center text-lg">
+          Indica el número de pases, seguido de los nombres completos de los invitados. Podrás registrar un máximo de cuatro invitados*
         </p>
 
         <div className="bg-white shadow-2xl my-4 p-4  rounded-sm w-full sm:w-100dvw">
-          <div className="flex flex-row justify-between items-center">
-            <label htmlFor="numguest" className="text-sm font-googleSans">Número de pases</label>
-            <input type="number" name="numguest" min={1} max={MAX_GUEST} className="bg-white rounded-sm w-40 block py-1.5 pr-3 pl-1 text-sm text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border-1 border-blue-600"
+          <div className="flex flex-row justify-between items-center text-lg">
+            <label htmlFor="numguest" className="font-googleSans">Número de pases</label>
+            <input type="number" name="numguest" min={1} max={MAX_GUEST} className="bg-white rounded-sm w-40 block py-1.5 pr-3 pl-1 text-sm text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border border-blue-600"
               value={amount}
               onChange={handleAmount}
               onFocus={(e) => e.target.select()}
@@ -331,7 +315,7 @@ const App = () => {
                     <input key={index} type="text" value={name} placeholder={`Nombre del invitado ${index + 1}`}
                       onChange={(e) => handleChangeName(index, e.target.value)}
                       required
-                      className="bg-white rounded-sm block w-full grow my-4 py-3 pl-1 text-sm  text-gray-900 placeholder:text-gray-900 border-1 border-blue-600" />
+                      className="bg-white rounded-sm block w-full grow my-4 py-3 pl-1 text-gray-900 placeholder:text-gray-900 border border-blue-600" />
                   ))
                 }
               </div>
@@ -355,7 +339,7 @@ const App = () => {
             <div className="my-8">
               {
                 names.map((name: string) => (
-                  <p key={name} className="my-2  text-xl border-b-1 border-gray-600">{name}</p>
+                  <p key={name} className="my-2  text-xl border border-gray-600">{name}</p>
                 ))
               }
 
