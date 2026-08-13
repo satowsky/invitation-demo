@@ -25,7 +25,7 @@ const App = () => {
   const [isSobre, setIsSobre] = useState(true);
 
 
-  const MAX_GUEST = 1;
+  const MAX_GUEST = 2;
 
 
   useEffect(() => {
