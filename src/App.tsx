@@ -4,58 +4,90 @@ import Hojas2 from "./assets/hojas2.webp";
 import Marco2 from "./assets/marco2.webp";
 import Marco1 from "./assets/marco1.webp";
 import { FaCalendarCheck } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import { LuTimer } from "react-icons/lu";
 import { MdOutlinePlace } from "react-icons/md";
-import './particles'
+import { FaPlus } from "react-icons/fa6";
+import './particles';
+import { FaMinus } from "react-icons/fa";
 import { colors } from "./constans";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import music from './assets/music.mp3'
+import { MdMarkEmailUnread } from "react-icons/md";
 
 
 const App = () => {
   const [amount, setAmount] = useState(1);
-  const [names, setNames] = useState(['']);
   const [isOpen, setIsOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isSobre, setIsSobre] = useState(true);
+
 
   const MAX_GUEST = 4;
 
-  const handleAmount = (e: any) => {
-    const value = Math.max(1, parseInt(e.target.value) || 1);
 
-    if (value >= 1 && value <= MAX_GUEST) {
-      setAmount(value);
+  useEffect(() => {
+    const audio = audioRef.current;
+    const iniciarAudio = () => {
+      if (audio) {
+        audio.play()
+          .then(() => {
+            console.log("Audio reproduciéndose");
+            removerEventos();
+          })
+          .catch((error) => {
+            console.log("El navegador bloqueó el autoplay basado en mouse:", error);
+          });
+      }
+    };
 
-      setNames((names) => {
-        return Array.from({ length: value }, (_, index) => {
-          return names[index] !== undefined ? names[index] : '';
-        });
-      });
+    const removerEventos = () => {
+      window.removeEventListener("mousemove", iniciarAudio);
+      window.removeEventListener("touchstart", iniciarAudio);
+      window.removeEventListener("touchmove", iniciarAudio);
+    };
+
+    window.addEventListener("mousemove", iniciarAudio);
+    window.addEventListener("touchstart", iniciarAudio);
+    window.addEventListener("touchmove", iniciarAudio);
+
+    return () => removerEventos();
+  }, []);
+
+  function addGuest() {
+    if (amount > 0 && amount < MAX_GUEST) {
+      setAmount(amount + 1)
+    } else {
+      setAmount(MAX_GUEST);
+      console.log(`Limit guess reached ${MAX_GUEST}`);
+      alert(`Solo puedes agregar ${MAX_GUEST} invitados`);
     }
-  };
+  }
 
-  const handleChangeName = (index: number, value: any) => {
-    setNames((names) => {
-      const newArray = [...names];
-      newArray[index] = value;
-      return newArray;
-    });
+  function removeGuest() {
+    if (amount > 1 && amount < MAX_GUEST) {
+      setAmount(amount - 1)
+    } else {
+      setAmount(1);
+      console.log(`Ya no puedes quitar mas, tienes que confirmar al menos 1`)
+      alert('Tienes que confirmar al menos 1');
+    }
   }
 
   async function sendData(e: React.FormEvent) {
     e.preventDefault();
+    const data = [amount, MAX_GUEST];
 
-    // 1. Verificación en consola para confirmar qué se está enviando realmente
-    console.log("Datos a enviar:", names);
-
-    if (!names || names.length === 0) {
-      console.error("El arreglo de nombres está vacío. No se enviará la petición.");
-      return;
-    }
+    console.log("Datos a enviar:", data);
 
     try {
-      const payload = JSON.stringify(names);
+      setOpenModal(true);
+      const payload = JSON.stringify(data);
 
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbwWa4adkajaJ7CdJsd4BtasB-F7h5jb-XfwmydENaSLN4BW-TUKMXh37oqiPmMXv7pnuA/exec",
+        "https://script.google.com/macros/s/AKfycbzgiE4fNhsgVGkVTBfbajqU9pXmyDKeeFOX4BDPsqA8Wq9BmicAjabiZdj5bZe9Tw0YPQ/exec",
         {
           method: "POST",
           headers: {
@@ -65,21 +97,25 @@ const App = () => {
         }
       );
 
-      const resultado = await response.json();
-      console.log("Respuesta de Google Sheets:", resultado);
+      const res = await response.json();
+      console.log("Google sheets response:", res);
 
-      if (resultado.result === "success") {
+      if (res.result === "success") {
+        setOpenModal(false);
         setIsOpen(true);
       }
 
-      return resultado;
+      return res;
     } catch (error) {
-      console.error("Error enviando datos:", error);
+      console.error("Error sending data:", error);
     }
   }
 
   return (
-    <div className="bg-red-100 flex flex-row flex-wrap items-center justify-center min-h-dvh w-full gap-2 no-scrollbar overflow-y-auto">
+    <div className="bg-red-100 flex flex-row flex-wrap items-center justify-center h-full w-full gap-2 no-scrollbar overflow-y-auto">
+      <div className="hidden w-20 h-20 fixed z-100 left-0 mb-4 ml-4 rounded-full bottom-0 bg-white shadow-lg">
+        <audio loop controls src={music} ref={audioRef} />
+      </div>
       <div className="fixed z-20 w-dvw top-0 right-0 left-0 ">
         <div className="absolute top-0 z-10 w-dvw h-20 ">
           <div className="flex justify-center ">
@@ -212,10 +248,10 @@ const App = () => {
               <div className=" w-47.5 rotate-10">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
-              <div className=" w-30 otate-10">
+              <div className=" w-30 rotate-10">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
-              <div className=" w-40 otate-10">
+              <div className=" w-40 rotate-10">
                 <img src={Hojas} alt="Hojas" className="" />
               </div>
               <div className=" w-40 rotate-260">
@@ -233,7 +269,8 @@ const App = () => {
       </div>
 
       <div className="bg-red-50 flex flex-col items-center justify-start pt-50 w-dvw   sm:w-150  min-h-dvh rounded-lg p-4">
-        <h2 className="-m-30 font-luxurious text-[70px] sm:text-[90px]  bg-linear-to-r from-yellow-600 via-yellow-500 to-yellow-600 inline-block text-transparent bg-clip-text decoration-red-800 border-b-yellow-900 [-webkit-text-stroke:1px_yellow-900] px-2">
+
+        <h2 className=" -m-30 font-luxurious text-[70px] sm:text-[90px]  bg-linear-to-r from-yellow-600 via-yellow-500 to-yellow-600 inline-block text-transparent bg-clip-text decoration-red-800 border-b-yellow-900 [-webkit-text-stroke:1px_yellow-900] px-2">
           Celebrando
         </h2>
         <div className="flex items-center flex-row mt-20 max-h-30">
@@ -294,36 +331,57 @@ const App = () => {
 
         <p className="my-2 text-center font-LibreBaskerville text-lg">Tu presencia es muy importante para nosotros. Favor de confirmar tu asistencia <b>antes del 01 de Septiembre de 2026.</b></p>
 
-        <p className="my-2 text-center text-lg">
-          Indica el número de pases, seguido de los nombres completos de los invitados. Podrás registrar un máximo de cuatro invitados*
-        </p>
-
-        <div className="bg-white shadow-2xl my-4 p-4  rounded-sm w-full sm:w-100dvw">
-          <div className="flex flex-row justify-between items-center text-lg">
-            <label htmlFor="numguest" className="font-googleSans">Número de pases</label>
-            <input type="number" name="numguest" min={1} max={MAX_GUEST} className="bg-white rounded-sm w-40 block py-1.5 pr-3 pl-1 text-sm text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border border-blue-600"
-              value={amount}
-              onChange={handleAmount}
-              onFocus={(e) => e.target.select()}
-            />
-          </div>
+        <div className="bg-white shadow-2xl my-4 p-4 flex flex-col rounded-sm w-full sm:w-100dvw">
           <form className="" onSubmit={sendData}>
-            <div className="flex flex-col">
-              <div>
-                {
-                  names.map((name, index) => (
-                    <input key={index} type="text" value={name} placeholder={`Nombre del invitado ${index + 1}`}
-                      onChange={(e) => handleChangeName(index, e.target.value)}
-                      required
-                      className="bg-white rounded-sm block w-full grow my-4 py-3 pl-1 text-gray-900 placeholder:text-gray-900 border border-blue-600" />
-                  ))
-                }
-              </div>
+            <p className="text-[22px] font-medium py-4bolder text-center">
+              {
+                MAX_GUEST > 1 ? (
+                  `Tienes ${MAX_GUEST} pases disponibles`
+                ) : (
+                  `Tienes ${MAX_GUEST} pase disponible`
+                )
+              }
+
+            </p>
+            <div className="flex flex-col py-4 justify-between ">
+              {
+                MAX_GUEST > 1 ? (
+                  <label htmlFor="numGuest" className="font-googleSans text-lg py-4">¿Cuantas personas deseas confirmar?</label>
+                ) : ''
+              }
+              <input type="text" id="numGuest" className="bg-white rounded-sm px-8 py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border border-blue-600"
+                value={amount}
+                readOnly
+              />
+              {
+                MAX_GUEST > 1 ? (
+                  <div className="flex justify-between py-4 gap-6">
+                    <button
+                      onClick={removeGuest}
+                      type="button"
+                      className="px-2 py-4 flex justify-between items-center  text-xl text-red-500 font-medium rounded-sm hover:bg-red-200 focus:outline-none ring focus:ring-red-500 focus:ring-offset-2 transition duration-200">
+                      <span className="px-2"><FaMinus size={24} /></span>
+                      Quitar
+                    </button>
+                    <button
+                      onClick={addGuest}
+                      type="button"
+                      className="px-2 py-4 flex justify-between items-center  text-xl text-blue-500 font-medium rounded-sm hover:bg-blue-200 focus:outline-none ring focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                      <span className="px-2"><FaPlus size={24} /></span>
+                      Agregar otro
+                    </button>
+
+                  </div>
+                ) : ''
+              }
               <button
                 type="submit"
-                className="px-8 py-2 bg-blue-600 text-xl text-white font-medium rounded-lg shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                className="mt-4 px-8 py-4 bg-blue-600 text-xl text-white font-medium rounded-lg shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
                 Confirmar asistencia
               </button>
+              <div className="h-30">
+
+              </div>
             </div>
           </form>
 
@@ -334,22 +392,39 @@ const App = () => {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 bg-opacity-50 p-4">
-          <div className="bg-white rounded-sm max-w-md w-full p-6 shadow-2xl transform transition-all">
-            <h3 className="text-xl font-googleSans font-bold text-gray-900 mb-2 text-center">Tus pases han sido registrados</h3>
-            <div className="my-8">
-              {
-                names.map((name: string) => (
-                  <p key={name} className="my-2  text-xl border border-gray-600">{name}</p>
-                ))
+          <div className="bg-white rounded-sm max-w-md w-full p-6 shadow-2xl transform transition-all">   
+            <h3 className="font-googleSans font-bold text-gray-900 text-xl mb-2 text-center">Tus pases han sido registrados</h3>
+            <div className="flex flex-row justify-center items-center">
+              <span className="mr-2"><FaCheck size={18} color="#155dfc"/> </span>
+              <p className="my-8 text-xl">{
+                `Haz confirmado ${amount} pases.`
               }
-
+</p>
             </div>
             <button
               type="button"
-              onClick={() => { setIsOpen(false), setNames(['']), setAmount(1) }} // Cierra el modal al hacer clic
+              onClick={() => { setIsOpen(false), setAmount(1) }}
               className="w-full inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-xl font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none sm:text-lg transition"
             >
               OK
+            </button>
+          </div>
+        </div>
+      )}
+      {openModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 bg-opacity-50 p-4">
+          <div className="animate-spin">
+            <FaSpinner size={36} color="#155dfc" />
+          </div>
+        </div>
+      )}
+      {isSobre && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 bg-opacity-50 p-4">
+          <div className="w-full flex flex-row justify-center items-center animate-pulse">
+            
+            <button type="button" onClick={() => { setIsSobre(false) }} className="flex px-6 rounded-lg py-4 justify-center items-center bg-pink-400 border border-transparent shadow-sm hover:bg-pink-700 focus:outline-none transition">
+              <span className="pr-4"><MdMarkEmailUnread size={36} color="white"/></span>
+              <p className="text-xl text-white font-bold">Abrir invitación</p>
             </button>
           </div>
         </div>
