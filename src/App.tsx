@@ -371,8 +371,8 @@ const App = () => {
                 ) : ''
               }
 
-              <div className="flex justify-between py-4 gap-6">
-                <input type="text" id="numGuest" className="bg-white rounded-sm px-8 py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border border-blue-600"
+              <div className="flex justify-between py-4 gap-1">
+                <input type="text" id="numGuest" className="bg-white rounded-sm py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 border border-blue-600"
                   value={amount}
                   readOnly
                 />
@@ -397,7 +397,7 @@ const App = () => {
                     <input key={index} type="text" value={name} placeholder={`Nombre del invitado ${index + 1}`}
                       onChange={(e) => handleChangeName(index, e.target.value)}
                       required
-                      className="bg-white rounded-sm block w-full grow my-4 py-3 pl-1 text-gray-900 placeholder:text-gray-900 border border-blue-600" />
+                      className="bg-white rounded-sm block w-full grow my-4 py-3 pl-1 text-gray-900 placeholder:text-gray-900 border border-blue-600 text-lg" />
                   ))
                 }
 
