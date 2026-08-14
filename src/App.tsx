@@ -368,14 +368,14 @@ const App = () => {
             <div className="flex flex-col py-4 justify-between ">
               <label htmlFor="numGuest" className="font-googleSans text-lg py-4">¿Cuantas personas deseas confirmar?</label>
               <div className="flex justify-between py-4 gap-1">
-                <input type="text" id="numGuest" className="bg-white rounded-sm py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 border border-blue-600"
+                <input type="text" id="numGuest" className="w-20 bg-white rounded-sm py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 border border-blue-600"
                   value={amount}
                   readOnly
                 />
                 <button
                   onClick={removeGuest}
                   type="button"
-                  className="px-2 py-4 flex justify-between items-center  text-xl text-red-500 font-medium rounded-sm hover:bg-red-200 focus:outline-none ring focus:ring-red-500 focus:ring-offset-2 transition duration-200">
+                  className="px-2 py-4 flex justify-between items-center  text-xl text-red-500 font-medium rounded-sm hover:bg-red-200 focus:outline-none ring focus:ring-red-500 focus:ring-offset-1 transition duration-200">
                   <span className="px-2"><FaMinus size={24} /></span>
                   Quitar
                 </button>
