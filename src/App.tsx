@@ -23,6 +23,7 @@ const App = () => {
   const [openModal, setOpenModal] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isSobre, setIsSobre] = useState(true);
+  const [names, setNames] = useState<string[]>([]);
 
 
   const MAX_GUEST = 3;
@@ -56,29 +57,48 @@ const App = () => {
     return () => removerEventos();
   }, []);
 
+  useEffect(() => {
+    setNames((names) => {
+      if (amount > names.length) {
+        const newNames = Array(amount - names.length).fill('');
+        return [...names, ...newNames];
+      } else {
+        return names.slice(0, amount);
+      }
+    });
+  }, [amount]);
+
   function addGuest() {
-    if (amount > 0 && amount < MAX_GUEST) {
-      setAmount(amount + 1)
+    if (amount < MAX_GUEST) {
+      const newAmount = amount + 1;
+      setAmount(newAmount);
     } else {
-      setAmount(MAX_GUEST);
       console.log(`Limit guess reached ${MAX_GUEST}`);
       alert(`Solo puedes agregar ${MAX_GUEST} invitados`);
     }
   }
 
   function removeGuest() {
-    if (amount > 1 && amount < MAX_GUEST) {
-      setAmount(amount - 1)
+    if (amount > 1) {
+      const newAmount = amount - 1;
+      setAmount(newAmount);
     } else {
-      setAmount(1);
       console.log(`Ya no puedes quitar mas, tienes que confirmar al menos 1`)
       alert('Tienes que confirmar al menos 1');
     }
   }
 
+  const handleChangeName = (index: number, value: any) => {
+    setNames((names) => {
+      const newNames = [...names];
+      newNames[index] = value;
+      return newNames;
+    });
+  }
+
   async function sendData(e: React.FormEvent) {
     e.preventDefault();
-    const data = [amount, MAX_GUEST];
+    const data = names;
 
     console.log("Datos a enviar:", data);
 
@@ -87,7 +107,7 @@ const App = () => {
       const payload = JSON.stringify(data);
 
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbzgiE4fNhsgVGkVTBfbajqU9pXmyDKeeFOX4BDPsqA8Wq9BmicAjabiZdj5bZe9Tw0YPQ/exec",
+        "https://script.google.com/macros/s/AKfycbwd5eCu9z0ztfS2nSYcjNTn4Q8mZXepWGZOSu2XkBhK2a4rzIc30GgY2GLjIKpZtMAUUA/exec",
         {
           method: "POST",
           headers: {
@@ -349,38 +369,42 @@ const App = () => {
                   <label htmlFor="numGuest" className="font-googleSans text-lg py-4">¿Cuantas personas deseas confirmar?</label>
                 ) : ''
               }
-              <input type="text" id="numGuest" className="bg-white rounded-sm px-8 py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border border-blue-600"
-                value={amount}
-                readOnly
-              />
-              {
-                MAX_GUEST > 1 ? (
-                  <div className="flex justify-between py-4 gap-6">
-                    <button
-                      onClick={removeGuest}
-                      type="button"
-                      className="px-2 py-4 flex justify-between items-center  text-xl text-red-500 font-medium rounded-sm hover:bg-red-200 focus:outline-none ring focus:ring-red-500 focus:ring-offset-2 transition duration-200">
-                      <span className="px-2"><FaMinus size={24} /></span>
-                      Quitar
-                    </button>
-                    <button
-                      onClick={addGuest}
-                      type="button"
-                      className="px-2 py-4 flex justify-between items-center  text-xl text-blue-500 font-medium rounded-sm hover:bg-blue-200 focus:outline-none ring focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
-                      <span className="px-2"><FaPlus size={24} /></span>
-                      Agregar otro
-                    </button>
-
-                  </div>
-                ) : ''
-              }
+              <div className="flex justify-between py-4 gap-2">
+                <input type="text" id="numGuest" className="w-30 bg-white rounded-sm px-2 py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border border-blue-600"
+                  value={amount}
+                  readOnly
+                />
+                <button
+                  onClick={removeGuest}
+                  type="button"
+                  className="w-full px-2 py-4 flex justify-center items-center  text-xl text-red-500 font-medium rounded-sm hover:bg-red-200 focus:outline-none ring focus:ring-red-500 focus:ring-offset-2 transition duration-200">
+                  <span className="px-2"><FaMinus size={24} /></span>
+                  Quitar
+                </button>
+                <button
+                  onClick={addGuest}
+                  type="button"
+                  className="w-full px-2 py-4 flex justify-center items-center  text-xl text-blue-500 font-medium rounded-sm hover:bg-blue-200 focus:outline-none ring focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                  <span className="px-2"><FaPlus size={24} /></span>
+                  Agregar
+                </button>
+              </div>
+              <div className="">
+                {
+                  names.map((name, index) => (
+                    <input key={index} type="text" value={name} placeholder={`Nombre del invitado ${index + 1}`}
+                      onChange={(e) => handleChangeName(index, e.target.value)}
+                      required
+                      className="text-lg bg-white rounded-sm block w-full grow my-4 py-3 pl-1 text-gray-900 placeholder:text-gray-900 border border-blue-600" />
+                  ))
+                }
+              </div>
               <button
                 type="submit"
                 className="mt-4 px-8 py-4 bg-blue-600 text-xl text-white font-medium rounded-lg shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
                 Confirmar asistencia
               </button>
               <div className="h-30">
-
               </div>
             </div>
           </form>
@@ -392,14 +416,14 @@ const App = () => {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 bg-opacity-50 p-4">
-          <div className="bg-white rounded-sm max-w-md w-full p-6 shadow-2xl transform transition-all">   
+          <div className="bg-white rounded-sm max-w-md w-full p-6 shadow-2xl transform transition-all">
             <h3 className="font-googleSans font-bold text-gray-900 text-xl mb-2 text-center">Tus pases han sido registrados</h3>
             <div className="flex flex-row justify-center items-center">
-              <span className="mr-2"><FaCheck size={18} color="#155dfc"/> </span>
+              <span className="mr-2"><FaCheck size={18} color="#155dfc" /> </span>
               <p className="my-8 text-xl">{
                 `Haz confirmado ${amount} pases.`
               }
-</p>
+              </p>
             </div>
             <button
               type="button"
@@ -421,9 +445,9 @@ const App = () => {
       {isSobre && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 bg-opacity-50 p-4">
           <div className="w-full flex flex-row justify-center items-center animate-pulse">
-            
+
             <button type="button" onClick={() => { setIsSobre(false) }} className="flex px-6 rounded-lg py-4 justify-center items-center bg-pink-400 border border-transparent shadow-sm hover:bg-pink-700 focus:outline-none transition">
-              <span className="pr-4"><MdMarkEmailUnread size={36} color="white"/></span>
+              <span className="pr-4"><MdMarkEmailUnread size={36} color="white" /></span>
               <p className="text-xl text-white font-bold">Abrir invitación</p>
             </button>
           </div>
