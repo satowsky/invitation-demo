@@ -370,21 +370,21 @@ const App = () => {
                 ) : ''
               }
               <div className="flex justify-between py-4 gap-2">
-                <input type="text" id="numGuest" className="w-30 bg-white rounded-sm px-2 py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border border-blue-600"
+                <input type="text" id="numGuest" className="w-15 bg-white rounded-sm px-2 py-4 text-lg text-center text-gray-900 placeholder:text-gray-900 sm:text-sm/6 border border-blue-600"
                   value={amount}
                   readOnly
                 />
                 <button
                   onClick={removeGuest}
                   type="button"
-                  className="w-full px-2 py-4 flex justify-center items-center  text-xl text-red-500 font-medium rounded-sm hover:bg-red-200 focus:outline-none ring focus:ring-red-500 focus:ring-offset-2 transition duration-200">
+                  className=" px-2 py-4 flex justify-center items-center  text-xl text-red-500 font-medium rounded-sm hover:bg-red-200 focus:outline-none ring focus:ring-red-500 focus:ring-offset-2 transition duration-200">
                   <span className="px-2"><FaMinus size={24} /></span>
                   Quitar
                 </button>
                 <button
                   onClick={addGuest}
                   type="button"
-                  className="w-full px-2 py-4 flex justify-center items-center  text-xl text-blue-500 font-medium rounded-sm hover:bg-blue-200 focus:outline-none ring focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                  className="px-2 py-4 flex justify-center items-center  text-xl text-blue-500 font-medium rounded-sm hover:bg-blue-200 focus:outline-none ring focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
                   <span className="px-2"><FaPlus size={24} /></span>
                   Agregar
                 </button>
@@ -405,7 +405,7 @@ const App = () => {
                 className="mt-4 px-8 py-4 bg-blue-600 text-xl text-white font-medium rounded-lg shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
                 Confirmar asistencia
               </button>
-              <div className="h-8">
+              <div className="h-40">
 
               </div>
             </div>
